@@ -1,13 +1,15 @@
 const express = require("express");
 const app = express();
 const postsRoutes = require("./api/posts/posts.routes");
+const tagsRoutes = require("./api/posts/posts.routes");
+const authorRoutes = require("./api/Authors/routes");
 const connectDb = require("./database");
-const authorRouter = require("./api/Authors/routes");
 
 connectDb();
 app.use(express.json()); //json middleware (before routes)
 app.use("/posts", postsRoutes);
-app.use("/author", authorRouter);
+app.use("/author", authorRoutes);
+app.use("/tags", tagsRoutes);
 
 //notfound middleware (after routes)
 app.use((req, res, next) => {
