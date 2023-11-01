@@ -1,6 +1,15 @@
 const Author = require("../../models/Author");
 const Post = require("../../models/Post");
 
+exports.fetchAuthor = async (authorId, next) => {
+  try {
+    const author = await Author.findById(authorId);
+    return author;
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getAllAuthors = async (req, res, next) => {
   try {
     const authors = await Author.find().populate("posts");
@@ -14,6 +23,24 @@ exports.createAuthors = async (req, res, next) => {
   try {
     const authors = await Author.create(req.body);
     res.status(201).json(authors);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteAuthors = async (req, res, next) => {
+  try {
+    await Author.findByIdAndRemove({ _id: req.author._id });
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.authorsUpdate = async (req, res, next) => {
+  try {
+    await Author.findByIdAndUpdate(req.author.id, req.body);
+    res.status(204).end();
   } catch (error) {
     next(error);
   }
